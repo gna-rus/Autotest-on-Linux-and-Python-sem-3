@@ -59,7 +59,7 @@ def add_log_file():
     with open('stat.txt', 'a') as f:
         yield 0
         time = print(f"Time status: {datetime.now().strftime('%H:%M:%S.%f')}")
-        number_file_in_folder = subprocess.run(data["folder_in"], shell=True, stdout=subprocess.PIPE, encoding='utf-8')
+        number_file_in_folder = data["count"]
         size_of_file = data["bs"]
         #  cat /proc/loadavg ДОБАВЬ ЕЩЕ: статистика загрузки процессора из файла /proc/loadavg (можно писать просто всё содержимое этого файла)
         info_load_of_process = subprocess.run(f"cat /proc/loadavg", shell=True, stdout=subprocess.PIPE, encoding='utf-8')
