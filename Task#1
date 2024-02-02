@@ -57,16 +57,19 @@ def print_time():
 @pytest.fixture()
 def add_log_file():
     with open('stat.txt', 'a') as f:
+        yield 0
         time = print(f"Time status: {datetime.now().strftime('%H:%M:%S.%f')}")
         number_file_in_folder = subprocess.run(data["folder_in"], shell=True, stdout=subprocess.PIPE, encoding='utf-8')
         size_of_file = data["bs"]
-        # ДОБАВЬ ЕЩЕ: статистика загрузки процессора из файла /proc/loadavg (можно писать просто всё содержимое этого файла).
-        f.write(f"{time} - Number files: {number_file_in_folder} - Size of file: {size_of_file}")
+        #  cat /proc/loadavg ДОБАВЬ ЕЩЕ: статистика загрузки процессора из файла /proc/loadavg (можно писать просто всё содержимое этого файла)
+        info_load_of_process = subprocess.run(f"cat /proc/loadavg", shell=True, stdout=subprocess.PIPE, encoding='utf-8')
+        f.write(f"{time} - Number files: {number_file_in_folder} - Size of file: {size_of_file} - {info_load_of_process}")
 
 
 def find_subprocess(path: str, text: str):
     result = subprocess.run(path, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf-8')
     lst = result.stdout.split("\n") + result.stderr.split("\n")
+
     print(lst, text in lst)
     if text in lst:
         return True
