@@ -1,5 +1,4 @@
 import pytest
-# from checkers_les import checkout
 import random, string
 import yaml
 from datetime import datetime
@@ -65,16 +64,17 @@ def print_time():
     print(f"Finish: {datetime.now().strftime('%H:%M:%S.%f')}")
 
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @pytest.fixture()
 def add_log_file():
+    # Task#1
+    #функция логирования
     with open('stat.txt', 'a') as f:
         yield 0
         time = f"Time status: {datetime.now().strftime('%H:%M:%S.%f')}"
         print(time)
         number_file_in_folder = data["count"]
         size_of_file = data["bs"]
-        #  cat /proc/loadavg ДОБАВЬ ЕЩЕ: статистика загрузки процессора из файла /proc/loadavg (можно писать просто всё содержимое этого файла)
+        # Task#2
         info_load_of_process = subprocess.run(f"cat /proc/loadavg", shell=True, stdout=subprocess.PIPE, encoding='utf-8')
         f.write(f"{time} - Number files: {number_file_in_folder} - Size of file: {size_of_file} - {info_load_of_process}\n")
 
@@ -90,7 +90,6 @@ def find_subprocess(path: str, text: str):
         return False
 
 class Test_positiv:
-
     def test_step1(self, clear_folders, make_files, add_log_file):
         res1 = find_subprocess(f"cd {data['tst']}; 7z a {data['out']}/arx2", "Everything is 0k")
         res2 = find_subprocess(f"ls {data['out']}", "arx2.7z")
@@ -108,22 +107,22 @@ class Test_positiv:
     def test_step3(self, add_log_file):
         assert find_subprocess(f"cd {data['out']}/out; 7z l arx2.7z", "1 files"), "test3 FAIL"
 
-    # def test_step4(self, add_log_file):
-    #     # t: проверка целостности архива
-    #     assert find_subprocess(f"cd {data['out']}/out; 7z t arx2.7z", 'Everything is Ok'), "test4 FAIL"
-    #
-    # def test_step5(self, add_log_file):
-    #
-    #     assert find_subprocess(f"cd {data['out']}/out; 7z d arx2.7z", 'Everything is Ok'), "test5 FAIL"
-    #
-    # def test_step6(self, add_log_file):
-    #
-    #     assert find_subprocess(f"cd {data['out']}/out; 7z u arx2.7z", 'Everything is Ok'), "test6 FAIL"
-    #
-    #
-    # def test_step7(self, clear_folders, make_files, add_log_file):
-    #     find_subprocess(f"cd {data['tst']}; 7z a {data['out']}/arx2", "Everything is 0k")
-    #     assert find_subprocess(f"cd {data['out']} && 7z x arx2.7z -o{data['folder1']}", 'Everything is Ok'), "test7 FAIL"
+    def test_step4(self, add_log_file):
+        # t: проверка целостности архива
+        assert find_subprocess(f"cd {data['out']}/out; 7z t arx2.7z", 'Everything is Ok'), "test4 FAIL"
+
+    def test_step5(self, add_log_file):
+
+        assert find_subprocess(f"cd {data['out']}/out; 7z d arx2.7z", 'Everything is Ok'), "test5 FAIL"
+
+    def test_step6(self, add_log_file):
+
+        assert find_subprocess(f"cd {data['out']}/out; 7z u arx2.7z", 'Everything is Ok'), "test6 FAIL"
+
+
+    def test_step7(self, clear_folders, make_files, add_log_file):
+        find_subprocess(f"cd {data['tst']}; 7z a {data['out']}/arx2", "Everything is 0k")
+        assert find_subprocess(f"cd {data['out']} && 7z x arx2.7z -o{data['folder1']}", 'Everything is Ok'), "test7 FAIL"
 
     # def test_step8(self):
     #     res1 = crc32(f"{data['out']}/arx2.7z").lower()
